@@ -1,5 +1,19 @@
+import { useState } from "react";
+
 function PercentageInputBox() {
   const tipValues = [5, 10, 15, 25, 50];
+  const [selectedTip, setSelectedTip] = useState("");
+  const [selectedColor,setSelectedColor] = useState(true)
+  const [customTip, setCustomTip] = useState("");
+
+  function fixTipValues(value) {
+    setSelectedTip(value);
+  }
+
+  function handleCustomTipChange(event) {
+    const value = event.target.value;
+    setCustomTip(value);
+  }
 
   return (
     <div id="tip-box">
@@ -7,7 +21,7 @@ function PercentageInputBox() {
       <div id="tip-options" class="tip-percentage-options">
         {/* <div class="tip-percentage-buttons"> */}
           {tipValues.map((value) => (
-            <button key={value} data-tip={value}>
+            <button key={value} data-tip={value} onClick={() => fixTipValues(value)}>
               {value}%
             </button>
           ))}
@@ -20,6 +34,8 @@ function PercentageInputBox() {
               step="5"
               min="0"
               max="100"
+              value={customTip}
+              onChange={handleCustomTipChange}
             />
           {/* </div> */}
 
