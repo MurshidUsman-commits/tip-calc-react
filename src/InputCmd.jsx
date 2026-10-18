@@ -1,7 +1,10 @@
+import { DEFAULT_NO_OF_PEOPLE } from "./TipCalculator";
+
 function InputCmd({ text, logo, value, setValue, placeholder, min, step }) {
   function handleInputChange(event) {
     const inputValue = event.target.value;
-    setValue(inputValue === "" ? "" : Number(inputValue));
+    if (inputValue === "") setValue(DEFAULT_NO_OF_PEOPLE);
+    setInputs((prev) => ({ ...prev, [inputKey]: inputValue }));
   }
 
   const isInvalid = value !== "" && Number(value) <= 0;
@@ -9,7 +12,7 @@ function InputCmd({ text, logo, value, setValue, placeholder, min, step }) {
   return (
     <div className="input-field">
       <div className="input-labels">
-        <label >{text}</label>
+        <label>{text}</label>
 
         {isInvalid && (
           <label className="num-input-error-message">Can't be zero</label>

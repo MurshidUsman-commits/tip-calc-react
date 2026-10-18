@@ -1,12 +1,15 @@
 import ResultAmounts from "./ResultAmounts";
 
-function CalculatorOutput({ tipAmount, totalAmount, onReset}) {
+function CalculatorOutput({
+  result: { tipPerPerson, totalPerPerson },
+  onReset,
+}) {
   return (
     <div className="calculator-output-section">
       <div>
         <ResultAmounts
-          tipAmount={tipAmount}
-          totalAmount={totalAmount}
+          tipAmount={tipPerPerson}
+          totalAmount={totalPerPerson}
           onReset={onReset}
         />
       </div>

@@ -15,6 +15,7 @@ function InputAmount({
     <div className="calculator-input-section">
       <InputCmd
         text="Bill"
+        inputKey="bill"
         logo="./images/icon-dollar.svg"
         value={bill}
         setValue={setBill}
@@ -24,6 +25,7 @@ function InputAmount({
       />
 
       <PercentageInputBox
+        inputKey="fixedTipPercent"
         tipPercent={tipPercent}
         setTipPercent={setTipPercent}
         customTip={customTip}
