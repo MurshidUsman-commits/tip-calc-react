@@ -1,9 +1,12 @@
-
-
-function ResultBtn() {
+function ResultBtn({ onReset}) {
   return (
-    <div><button className="reset-button" id="reset-button">RESET</button></div>
-  )
+    <button
+      type="button"
+      onClick={onReset}
+      className="reset-button"
+    >
+      RESET
+    </button>
+  );
 }
-
-export default ResultBtn
+export default ResultBtn;

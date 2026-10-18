@@ -1,49 +1,36 @@
-import { useState } from "react";
-
-function InputBox() {
-  const [Bill, setBill] = useState("");
-
+function InputBox({ bill, setBill }) {
   function handleInputChange(event) {
     const inputValue = event.target.value;
-    setBill(inputValue);
+    setBill(inputValue === "" ? "" : Number(inputValue));
+    console.log(event.target.value);
   }
 
+  const isInvalid = bill !== "" && Number(bill) <= 0;
+
   return (
-    <div>
-      <div className="input-field">
+    <div className="input-field">
+      <div className="input-labels">
+        <label>Bill</label>
 
-        <div className="input-labels">
-          <label>Bill</label>
-
-          {Bill !== "" && Number(Bill) <= 0 && (
-            <label
-              id="bill-error-message"
-              className="num-input-error-message"
-            >
-              Can't be zero
-            </label>
-          )}
-        </div>
-
-        <span>
-          <img src="./images/icon-dollar.svg" alt="" />
-        </span>
-
-        <input
-          type="number"
-          placeholder="0"
-          id="bill-input"
-          step="5"
-          min="0"
-          onChange={handleInputChange}
-          className={
-            Number(Bill) <= 0
-              ? "input-error"
-              : ""
-          }
-        />
-
+        {isInvalid && (
+          <label className="num-input-error-message">Can't be zero</label>
+        )}
       </div>
+
+      <span>
+        <img src="./images/icon-dollar.svg" alt="" />
+      </span>
+
+      <input
+        type="number"
+        placeholder="25"
+        id="bill-input"
+        step="5"
+        min="25"
+        value={bill}
+        onChange={handleInputChange}
+        className={isInvalid ? "input-error" : ""}
+      />
     </div>
   );
 }

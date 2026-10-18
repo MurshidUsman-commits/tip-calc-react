@@ -1,12 +1,17 @@
-import ResultAmounts from "./ResultAmounts"
+import ResultAmounts from "./ResultAmounts";
 
-
-function CalculatorOutput() {
+function CalculatorOutput({ tipAmount, totalAmount, onReset}) {
   return (
     <div className="calculator-output-section">
-      <div><ResultAmounts/></div>
+      <div>
+        <ResultAmounts
+          tipAmount={tipAmount}
+          totalAmount={totalAmount}
+          onReset={onReset}
+        />
+      </div>
     </div>
-  )
+  );
 }
 
-export default CalculatorOutput
+export default CalculatorOutput;

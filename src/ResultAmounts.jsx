@@ -1,13 +1,13 @@
 import ResultBtn from "./ResultBtn"
 
-function ResultAmounts() {
-  let tipAmount = 0;
-  let totalAmount = 0;
+function ResultAmounts({ tipAmount, totalAmount, onReset}) {
+  // let tipAmount = 0;
+  // let totalAmount = 0;
   // let textTipAmount = document.getElementById("tip-per-person");
   // let arr = localStorage.getItem("tipAmount");
   const arr = [
-    { label: "Tip amount", amount: 0 },
-    { label: "Total amount", amount: 0 },
+    { label: "Tip amount", amount: tipAmount },
+    { label: "Total amount", amount: totalAmount },
   ];
 
   return (
@@ -25,7 +25,7 @@ function ResultAmounts() {
         ))}
       </div>
       <div className="result-btn">
-        <ResultBtn />
+        <ResultBtn onReset={onReset}/>
       </div>
     </div>
   );
