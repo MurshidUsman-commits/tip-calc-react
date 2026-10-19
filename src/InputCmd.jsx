@@ -1,13 +1,37 @@
-import { DEFAULT_NO_OF_PEOPLE } from "./TipCalculator";
+import { defaultInputValues } from "./TipCalculator";
 
-function InputCmd({ text, logo, value, setValue, placeholder, min, step }) {
+function Input({
+  text,
+  logo,
+  inputs,
+  setInputs,
+  errors,
+  setErrors,
+  validateInp,
+  inputKey,
+  placeholder,
+  min,
+  step,
+}) {
+  const invalidMsg = errors[inputKey];
+  const isInvalid = Boolean(invalidMsg);
+
   function handleInputChange(event) {
     const inputValue = event.target.value;
-    if (inputValue === "") setValue(DEFAULT_NO_OF_PEOPLE);
+    if (inputValue === "")
+      setInputs((prev) => ({
+        ...prev,
+        [inputKey]: defaultInputValues[inputKey],
+      }));
     setInputs((prev) => ({ ...prev, [inputKey]: inputValue }));
-  }
 
-  const isInvalid = value !== "" && Number(value) <= 0;
+    const invalidMsg = validateInp(inputValue);
+    if (invalidMsg) {
+      setErrors((prev) => ({ ...prev, [inputKey]: invalidMsg }));
+    } else {
+      setErrors((prev) => ({ ...prev, [inputKey]: undefined }));
+    }
+  }
 
   return (
     <div className="input-field">
@@ -15,7 +39,7 @@ function InputCmd({ text, logo, value, setValue, placeholder, min, step }) {
         <label>{text}</label>
 
         {isInvalid && (
-          <label className="num-input-error-message">Can't be zero</label>
+          <label className="num-input-error-message">{invalidMsg}</label>
         )}
       </div>
 
@@ -28,7 +52,7 @@ function InputCmd({ text, logo, value, setValue, placeholder, min, step }) {
         placeholder={placeholder}
         min={min}
         step={step}
-        value={value}
+        value={inputs[inputKey]}
         onChange={handleInputChange}
         className={isInvalid ? "input-error" : ""}
       />
@@ -36,4 +60,4 @@ function InputCmd({ text, logo, value, setValue, placeholder, min, step }) {
   );
 }
 
-export default InputCmd;
+export default Input;

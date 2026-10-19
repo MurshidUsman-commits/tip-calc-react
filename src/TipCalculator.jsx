@@ -1,4 +1,4 @@
-import InputAmount from "./InputAmount";
+import Inputs from "./Inputs";
 import CalculatorOutput from "./CalculatorOutput";
 import { useEffect, useState } from "react";
 
@@ -7,12 +7,20 @@ export const DEFAULT_NO_OF_PEOPLE = 1;
 export const DEFAULT_CUSTOM_TIP_PERCENT = "";
 export const DEFAULT_FIXED_TIP_PERCENT = 0;
 
+export const defaultInputValues = {
+  bill: DEFAULT_BILL,
+  fixedTipPercent: DEFAULT_FIXED_TIP_PERCENT,
+  customTipPercent: DEFAULT_CUSTOM_TIP_PERCENT,
+  numberOfPeople: DEFAULT_NO_OF_PEOPLE,
+};
+
 function TipCalculator() {
-  const [inputs, setInputs] = useState({
-    bill: DEFAULT_BILL,
-    fixedTipPercent: DEFAULT_FIXED_TIP_PERCENT,
-    customTipPercent: DEFAULT_CUSTOM_TIP_PERCENT,
-    numberOfPeople: DEFAULT_NO_OF_PEOPLE,
+  const [inputs, setInputs] = useState(defaultInputValues);
+
+  const [errors, setErrors] = useState({
+    bill: undefined,
+    customTipPercent: undefined,
+    numberOfPeople: undefined,
   });
 
   const [isInputValid, setIsInputValid] = useState(false);
@@ -24,32 +32,31 @@ function TipCalculator() {
 
   useEffect(() => {
     let isValid = true;
-    if (bill < 25) isValid = false;
-    if (people < 1) isValid = false;
-    if (customTip === "") {
-      if (tipPercent < 1) isValid = false;
+    for (const k in errors) {
+      if (errors[k]) isValid = false;
     }
     setIsInputValid(isValid);
-  }, [bill, people, customTip, tipPercent]);
+  }, [errors]);
 
   useEffect(() => {
     if (!isInputValid) return;
 
+    const { bill, fixedTipPercent, customTipPercent, numberOfPeople } = inputs;
+
+    const tipPercent = fixedTipPercent ?? customTipPercent;
+
     const tipTotal = bill * (tipPercent / 100);
-    const tipPerPerson = tipTotal / people;
-    const totalPerPerson = (bill + tipTotal) / people;
+    const tipPerPerson = tipTotal / numberOfPeople;
+    const totalPerPerson = (bill + tipTotal) / numberOfPeople;
 
     setResult({
       tipPerPerson,
       totalPerPerson,
     });
-  }, [bill, people, customTip, tipPercent, isInputValid]);
+  }, [inputs, isInputValid]);
 
   function handleReset() {
-    setBill(DEFAULT_BILL);
-    setTipPercent(DEFAULT_FIXED_TIP_PERCENT);
-    setCustomTip(DEFAULT_CUSTOM_TIP_PERCENT);
-    setPeople(DEFAULT_NO_OF_PEOPLE);
+    setInputs(defaultInputValues);
   }
 
   return (
@@ -59,15 +66,11 @@ function TipCalculator() {
       </div>
 
       <div className="box-container">
-        <InputAmount
-          bill={bill}
-          setBill={setBill}
-          tipPercent={tipPercent}
-          setTipPercent={setTipPercent}
-          customTip={customTip}
-          setCustomTip={setCustomTip}
-          people={people}
-          setPeople={setPeople}
+        <Inputs
+          inputs={inputs}
+          setInputs={setInputs}
+          errors={errors}
+          setErrors={setErrors}
         />
         <CalculatorOutput result={result} onReset={handleReset} />
       </div>
