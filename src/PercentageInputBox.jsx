@@ -1,41 +1,62 @@
 function PercentageInputBox({
-  tipPercent,
-  setTipPercent,
-  customTip,
-  setCustomTip,
+  inputs,
+  setInputs,
+  errors,
+  setErrors,
+  inputKey,
 }) {
-  const isInvalid =
-    customTip !== "" && (Number(customTip) <= 0 || Number(customTip) > 100);
-
   const tipValues = [5, 10, 15, 25, 50];
-  function handleSelectTip(val) {
-    if(tipPercent === val && customTip== ""){
-      setTipPercent(0)
-    } else{
-    setTipPercent(Number(val));
-    setCustomTip("");}
+
+  const customTip = inputs.customTipPercent;
+  const tipPercent = Number(inputs.fixedTipPercent);
+
+  const isInvalid = Boolean(errors?.customTipPercent);
+
+  function handleSelectTip(value) {
+    setInputs((prev) => ({
+      ...prev,
+      [inputKey]: value,
+      customTipPercent: "",
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      customTipPercent: undefined,
+    }));
   }
 
   function handleCustomTipChange(event) {
     const value = event.target.value;
-    if (value < 0 || value > 100) {
-      setCustomTip("");
-      setTipPercent(0);
-      return;
+
+    setInputs((prev) => ({
+      ...prev,
+      [inputKey]: 0,
+      customTipPercent: value,
+    }));
+
+    let error;
+
+    if (value !== "" && Number(value) <= 0) {
+      error = "Tip percentage must be greater than 0";
+    } else if (Number(value) > 100) {
+      error = "Tip percentage cannot be greater than 100";
     }
-    setCustomTip(value);
-    setTipPercent(value === "" ? 0 : Number(value));
+
+    setErrors((prev) => ({
+      ...prev,
+      customTipPercent: error,
+    }));
   }
 
   return (
     <div id="tip-box">
-      <label>Select Tips %</label>
+      <label>Select Tip %</label>
+
       <div id="tip-options" className="tip-percentage-options">
-        {/* <div class="tip-percentage-buttons"> */}
         {tipValues.map((value) => (
           <button
+            type="button"
             key={value}
-            data-tip={value}
             className={
               tipPercent === value && customTip === "" ? "active-tip" : ""
             }
@@ -45,28 +66,20 @@ function PercentageInputBox({
           </button>
         ))}
 
-        {/* <div class="tip-percentage-custom"> */}
         <input
           type="number"
           placeholder="Custom"
           id="custom-tip-input"
-          step="5"
-          min={0}
+          min="0"
           max="100"
-          className={isInvalid ? "input-error" : ""}
+          step="1"
           value={customTip}
+          className={isInvalid ? "input-error" : ""}
           onChange={handleCustomTipChange}
         />
-        {/* </div> */}
-
-        {/* </div> */}
-
-        {/* <!-- <button data-tip="5">5%</button>
-            <button data-tip="10">10%</button>
-            <button data-tip="15">15%</button>
-            <button data-tip="25">25%</button>
-            <button data-tip="50">50%</button>  --> */}
       </div>
+
+      {isInvalid && <p className="error-message">{errors.customTipPercent}</p>}
     </div>
   );
 }

@@ -26,6 +26,8 @@ function Inputs({ inputs, setInputs, errors, setErrors }) {
         inputKey="fixedTipPercent"
         inputs={inputs}
         setInputs={setInputs}
+        errors={errors}
+        setErrors={setErrors}
       />
 
       <Input

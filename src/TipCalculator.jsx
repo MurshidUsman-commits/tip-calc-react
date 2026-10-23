@@ -43,11 +43,14 @@ function TipCalculator() {
 
     const { bill, fixedTipPercent, customTipPercent, numberOfPeople } = inputs;
 
-    const tipPercent = fixedTipPercent ?? customTipPercent;
+    const tipPercent =
+      customTipPercent !== ""
+        ? Number(customTipPercent)
+        : Number(fixedTipPercent);
 
     const tipTotal = bill * (tipPercent / 100);
     const tipPerPerson = tipTotal / numberOfPeople;
-    const totalPerPerson = (bill + tipTotal) / numberOfPeople;
+    const totalPerPerson = (Number(bill) + tipTotal) / numberOfPeople;
 
     setResult({
       tipPerPerson,
@@ -57,6 +60,18 @@ function TipCalculator() {
 
   function handleReset() {
     setInputs(defaultInputValues);
+    setErrors({
+      bill: undefined,
+      customTipPercent: undefined,
+      numberOfPeople: undefined,
+    });
+
+    setIsInputValid(false);
+
+    setResult({
+      tipPerPerson: 0,
+      totalPerPerson: 0,
+    });
   }
 
   return (
